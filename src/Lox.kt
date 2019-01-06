@@ -10,13 +10,13 @@ class Lox {
         var hadError = false
 
         fun run(args: Array<String>) {
-            if (args.size > 1) {
-                System.out.println("Usage: klox [script]")
-                System.exit(64)
-            } else if (args.size == 1) {
-                throw Exception("unimplemented")
-            } else {
-                runPrompt()
+            when {
+                args.size > 1 -> {
+                    System.out.println("Usage: klox [script]")
+                    System.exit(64)
+                }
+                args.size == 1 -> throw Exception("unimplemented")
+                else -> runPrompt()
             }
         }
 
