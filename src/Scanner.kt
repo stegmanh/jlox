@@ -23,6 +23,25 @@ class Scanner(val source: String) {
     }
 
     fun scanToken() {
-        
+        val c = advance()
+        when(c) {
+            '(' -> addToken(LEFT_PAREN);
+            ')' -> addToken(RIGHT_PAREN);
+            // TODO: More
+        }
+    }
+
+    private fun advance(): Char {
+        this.current++
+        return source[current - 1]
+    }
+
+    private fun addToken(type: TokenType) {
+        addToken(type, null)
+    }
+
+    private fun addToken(type: TokenType, literal: Object?) {
+        val text = this.source.substring(start, current)
+        tokens.add(Token(type, text, literal, line))
     }
 }
