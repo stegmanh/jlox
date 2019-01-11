@@ -25,9 +25,21 @@ class Scanner(val source: String) {
     fun scanToken() {
         val c = advance()
         when(c) {
-            '(' -> addToken(LEFT_PAREN);
-            ')' -> addToken(RIGHT_PAREN);
-            // TODO: More
+            '(' -> addToken(LEFT_PAREN)
+            ')' -> addToken(RIGHT_PAREN)
+            '{' -> addToken(LEFT_BRACE)
+            '}' -> addToken(RIGHT_BRACE)
+            ',' -> addToken(COMMA)
+            '.' -> addToken(DOT)
+            '-' -> addToken(MINUS)
+            '+' -> addToken(PLUS)
+            ';' -> addToken(SEMICOLON)
+            '*' -> addToken(STAR)
+            '!' -> addToken(if (match('=')) BANG_EQUAL else BANG)
+            '=' -> addToken(if (match('=')) EQUAL_EQUAL else EQUAL)
+            '<' -> addToken(if (match('=')) LESS else LESS_EQUAL)
+            '>' -> addToken(if (match('=')) GREATER else GREATER_EQUAL)
+            else -> Lox.error(line, "unexpected token $c.") // TODO: Turn a string of errors into a single error
         }
     }
 
