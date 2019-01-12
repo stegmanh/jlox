@@ -39,6 +39,17 @@ class Scanner(val source: String) {
             '=' -> addToken(if (match('=')) EQUAL_EQUAL else EQUAL)
             '<' -> addToken(if (match('=')) LESS else LESS_EQUAL)
             '>' -> addToken(if (match('=')) GREATER else GREATER_EQUAL)
+            '/' -> {
+                if (match('/')) {
+                    while (peek() != '\n' && !isAtEnd()) advance()
+                } else {
+                    addToken(SLASH)
+                }
+            }
+            ' ', '\r', '\t' -> {}
+            '\n' -> {
+                line++
+            }
             else -> Lox.error(line, "unexpected token $c.") // TODO: Turn a string of errors into a single error
         }
     }
@@ -55,5 +66,18 @@ class Scanner(val source: String) {
     private fun addToken(type: TokenType, literal: Object?) {
         val text = this.source.substring(start, current)
         tokens.add(Token(type, text, literal, line))
+    }
+
+    private fun match(expected: Char): Boolean {
+        if (isAtEnd()) { return false }
+        if (source[current] != expected) return false
+
+        current++
+        return true
+    }
+
+    private fun peek(): Char {
+        if (isAtEnd()) { return 0.toChar() } // null character
+        return source[current]
     }
 }
