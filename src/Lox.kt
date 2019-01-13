@@ -41,12 +41,12 @@ class Lox {
 
         private fun run(source: String) {
             println("running: $source")
-            /*val scanner = Scanner(source)
-            List<Token> tokens = scanner.scanTokens()
+            val scanner = Scanner(source)
+            val tokens = scanner.scanTokens()
 
-            for (Token t : tokens) {
-                System.out.println(t)
-            }*/
+            tokens.forEach { token ->
+                System.out.println(token)
+            }
         }
 
         fun error(line: Int, message: String) {
