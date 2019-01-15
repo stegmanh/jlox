@@ -1,7 +1,11 @@
 package lox
 
+import java.util.List;
+
 abstract class Expr {
-    // Static by default
-    class Binary(val left: Expr, val operator: Token, val right: Expr) : Expr() {}
+    class Binary(left: Expr, operator: Token, right: Expr) : Expr()
+    class Grouping(expression: Expr) : Expr()
+    class Literal(value: Any) : Expr()
+    class Unary(operator: Token, right: Expr) : Expr()
 }
 
