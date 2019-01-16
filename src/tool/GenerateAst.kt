@@ -10,8 +10,8 @@ class GenerateAst {
                 System.out.println("usage: generate_ast [output dir]")
                 System.exit(1)
             }
-            val outputDir = args[0]
-            //val outputDir = "/Users/holdenstegman/code/klox/dump"
+            //val outputDir = args[0]
+            val outputDir = "/Users/holdenstegman/code/klox/dump"
             defineAST(outputDir, "Expr", listOf(
                     "Binary   ; left: Expr, operator: Token, right: Expr",
                     "Grouping ; expression: Expr",
@@ -30,12 +30,16 @@ class GenerateAst {
             writer.println()
             writer.println("abstract class $baseName {")
 
+            defineVisitor(writer, baseName, types)
+
             types.forEach {type ->
                 val className = type.split(";")[0].trim()
                 val fields = type.split(";")[1].trim()
                 defineType(writer, baseName, className, fields)
-                print(fields)
             }
+
+            writer.println()
+            writer.println("  abstract <R> R accept(visitor: Visitor<R>)")
 
             writer.println("}")
             writer.close()
@@ -44,6 +48,16 @@ class GenerateAst {
 
         private fun defineType(writer: PrintWriter, baseName: String, className: String, fieldList: String) {
             writer.println("  class $className($fieldList) : $baseName() {}")
+        }
+
+        private fun defineVisitor(writer: PrintWriter, baseName: String, types: List<String>) {
+            writer.println("  interface Visitor<R> {")
+            types.forEach {type ->
+                val typeName = type.split(";")[0].trim()
+                writer.println("    R visit $baseName: $typeName (${baseName.toLowerCase()}: $typeName)")
+            }
+
+            writer.println("  }")
         }
     }
 }
