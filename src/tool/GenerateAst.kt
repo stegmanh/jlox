@@ -48,13 +48,18 @@ class GenerateAst {
 
         private fun defineType(writer: PrintWriter, baseName: String, className: String, fieldList: String) {
             writer.println("  class $className($fieldList) : $baseName() {}")
+
+            writer.println()
+            writer.println("    <R> R accept(visitor: Visitor<R>) {")
+            writer.println("      return visitor.visit$className$baseName(this)")
+            writer.println("    }")
         }
 
         private fun defineVisitor(writer: PrintWriter, baseName: String, types: List<String>) {
             writer.println("  interface Visitor<R> {")
             types.forEach {type ->
                 val typeName = type.split(";")[0].trim()
-                writer.println("    R visit $baseName: $typeName (${baseName.toLowerCase()}: $typeName)")
+                writer.println("    fun visit$baseName$typeName(${baseName.toLowerCase()}: $typeName): R")
             }
 
             writer.println("  }")
