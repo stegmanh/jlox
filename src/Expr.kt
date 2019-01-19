@@ -1,17 +1,4 @@
-/*package lox
-
-import java.util.List;
-
-abstract class Expr {
-    class Binary(left: Expr, operator: Token, right: Expr) : Expr()
-    class Grouping(expression: Expr) : Expr()
-    class Literal(value: Any) : Expr()
-    class Unary(operator: Token, right: Expr) : Expr()
-}*/
-
 package lox;
-
-import java.util.List;
 
 abstract class Expr {
     interface Visitor<R> {
@@ -20,27 +7,30 @@ abstract class Expr {
         fun visitExprLiteral(expr: Literal): R
         fun visitExprUnary(expr: Unary): R
     }
+    internal abstract fun <R> accept(visitor: Visitor<R>): R
 
-    class Binary(left: Expr, operator: Token, right: Expr) : Expr()
-
-    /*<R> R accept(visitor: Visitor<R>) {
-        return visitor.visitBinaryExpr(this)
+    class Binary(val left: Expr, val operator: Token, val right: Expr) : Expr() {
+        override fun <R> accept(visitor: Visitor<R>): R {
+            return visitor.visitExprBinary(this)
+        }
     }
-    class Grouping(expression: Expr) : Expr() {}
 
-    <R> R accept(visitor: Visitor<R>) {
-        return visitor.visitGroupingExpr(this)
+    class Grouping(val expression: Expr) : Expr() {
+        override fun <R> accept(visitor: Visitor<R>): R {
+            return visitor.visitExprGrouping(this)
+        }
     }
-    class Literal(value: Any) : Expr() {}
 
-    <R> R accept(visitor: Visitor<R>) {
-        return visitor.visitLiteralExpr(this)
+    class Literal(val value: Any) : Expr() {
+        override fun <R> accept(visitor: Visitor<R>): R {
+            return visitor.visitExprLiteral(this)
+        }
     }
-    class Unary(operator: Token, right: Expr) : Expr() {}
 
-    <R> R accept(visitor: Visitor<R>) {
-        return visitor.visitUnaryExpr(this)
-    }*/
+    class Unary(val operator: Token, val right: Expr) : Expr() {
+        override fun <R> accept(visitor: Visitor<R>): R {
+            return visitor.visitExprUnary(this)
+        }
+    }
 
-    abstract <R> R accept(visitor: Visitor<R>)
 }

@@ -13,10 +13,10 @@ class GenerateAst {
             //val outputDir = args[0]
             val outputDir = "/Users/holdenstegman/code/klox/dump"
             defineAST(outputDir, "Expr", listOf(
-                    "Binary   ; left: Expr, operator: Token, right: Expr",
-                    "Grouping ; expression: Expr",
-                    "Literal  ; value: Any",
-                    "Unary    ; operator: Token, right: Expr"
+                    "Binary   ; val left: Expr, val operator: Token, val right: Expr",
+                    "Grouping ; val expression: Expr",
+                    "Literal  ; val value: Any",
+                    "Unary    ; val operator: Token, val right: Expr"
             ));
         }
 
@@ -32,14 +32,14 @@ class GenerateAst {
 
             defineVisitor(writer, baseName, types)
 
+            writer.println("  internal abstract fun <R> accept(visitor: Visitor<R>): R")
+            writer.println()
+
             types.forEach {type ->
                 val className = type.split(";")[0].trim()
                 val fields = type.split(";")[1].trim()
                 defineType(writer, baseName, className, fields)
             }
-
-            writer.println()
-            writer.println("  abstract <R> R accept(visitor: Visitor<R>)")
 
             writer.println("}")
             writer.close()
@@ -47,12 +47,12 @@ class GenerateAst {
         }
 
         private fun defineType(writer: PrintWriter, baseName: String, className: String, fieldList: String) {
-            writer.println("  class $className($fieldList) : $baseName() {}")
-
-            writer.println()
-            writer.println("    <R> R accept(visitor: Visitor<R>) {")
-            writer.println("      return visitor.visit$className$baseName(this)")
+            writer.println("  class $className($fieldList) : $baseName() {")
+            writer.println("    override fun <R> accept(visitor: Visitor<R>): R {")
+            writer.println("      return visitor.visit$baseName$className(this)")
             writer.println("    }")
+            writer.println("  }")
+            writer.println()
         }
 
         private fun defineVisitor(writer: PrintWriter, baseName: String, types: List<String>) {
