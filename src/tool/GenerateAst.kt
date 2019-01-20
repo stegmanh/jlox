@@ -10,8 +10,11 @@ class GenerateAst {
                 System.out.println("usage: generate_ast [output dir]")
                 System.exit(1)
             }
+
+            // TODO: Fix this to use CLI args
             //val outputDir = args[0]
             val outputDir = "/Users/holdenstegman/code/klox/dump"
+
             defineAST(outputDir, "Expr", listOf(
                     "Binary   ; val left: Expr, val operator: Token, val right: Expr",
                     "Grouping ; val expression: Expr",
