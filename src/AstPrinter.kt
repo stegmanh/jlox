@@ -20,4 +20,17 @@ class AstPrinter: Expr.Visitor<String> {
     override fun visitExprBinary(expr: Expr.Binary): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    private fun parenthesize(name: String, vararg exprs: Expr): String {
+        val builder = StringBuilder()
+
+        builder.append("(").append(name)
+        for (expr in exprs) {
+            builder.append(" ")
+            builder.append(expr.accept(this))
+        }
+        builder.append(")")
+
+        return builder.toString()
+    }
 }
